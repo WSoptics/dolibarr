@@ -59,7 +59,14 @@ if (defined('DOL_INC_FOR_VERSION_ERROR')) return;
 $conffiletoshowshort = "conf.php";
 // Define localization of conf file
 // --- Start of part replaced by Dolibarr packager makepack-dolibarr
-$conffile = "conf/conf.php";
+// $conffile = "conf/conf.php";
+$curr = getcwd(); 
+
+$chunks = explode('htdocs', $curr );
+
+$p = $chunks[0].'htdocs';
+
+$conffile = $p."/conf/conf.php"; 
 $conffiletoshow = "htdocs/conf/conf.php";
 // For debian/redhat like systems
 //$conffile = "/etc/dolibarr/conf.php";
@@ -73,8 +80,12 @@ $conffiletoshow = "htdocs/conf/conf.php";
 // Include configuration
 $result=@include_once $conffile;	// Keep @ because with some error reporting this break the redirect done when file not found
 
-if (! $result && ! empty($_SERVER["GATEWAY_INTERFACE"]))    // If install not done and we are in a web session
+$docRoot = $_SERVER["CONTEXT_DOCUMENT_ROOT"];
+// $result=@include $conffile;  
+
+if (! $result && ! empty($_SERVER["GATEWAY_INTERFACE"]))    // If install not done and we are in a web sessior
 {
+    $dr=$_SERVER["CONTEXT_DOCUMENT_ROOT"];
     if (! empty($_SERVER["CONTEXT_PREFIX"]))    // CONTEXT_PREFIX and CONTEXT_DOCUMENT_ROOT are not defined on all apache versions
     {
         $path=$_SERVER["CONTEXT_PREFIX"];       // example '/dolibarr/' when using an apache alias.
